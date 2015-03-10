@@ -90,5 +90,19 @@ class CheckListViewController: UITableViewController {
         
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
+    
+    @IBAction func addItem(sender: UIBarButtonItem) {
+            let newRowIndex = items.count
+            
+            let item = ChecklistItem()
+            item.text = "I am a new row"
+            item.checked = false
+            items.append(item)
+            
+            let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
+            let indexPaths = [indexPath]
+            tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+    }
+    
 }
 
