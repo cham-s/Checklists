@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CheckListViewController: UITableViewController {
+class CheckListViewController: UITableViewController, AddItemViewControllerDelegate {
     
     var items: [ChecklistItem]
     
@@ -98,7 +98,19 @@ class CheckListViewController: UITableViewController {
             tableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
     }
     
-    @IBAction func addItem(sender: UIBarButtonItem) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "AddItem" {
+            
+            let navigationController = segue.destinationViewController as UINavigationController
+            
+            let controller = navigationController.topViewController as AddItemViewController
+            
+            controller.delegate = self
+        }
+    }
+    
+    @IBAction func addItem() {
             let newRowIndex = items.count
             
             let item = ChecklistItem()
@@ -109,6 +121,15 @@ class CheckListViewController: UITableViewController {
             let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
             let indexPaths = [indexPath]
             tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+    }
+    
+    // AddItem delegate
+    func addItemViewControllerDidCancel(controller: AddItemViewController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func addItemViewController(controller: AddItemViewController, didFinishedAddingItem item: ChecklistItem) {
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
 }

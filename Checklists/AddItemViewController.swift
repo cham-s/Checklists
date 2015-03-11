@@ -8,10 +8,18 @@
 
 import UIKit
 
+protocol AddItemViewControllerDelegate: class {
+    func addItemViewControllerDidCancel(controller: AddItemViewController)
+    func addItemViewController(controller: AddItemViewController, didFinishedAddingItem item: ChecklistItem)
+}
+
 class AddItemViewController: UITableViewController, UITextFieldDelegate {
+    
     
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var doneBarButton: UIBarButtonItem!
+    
+    weak var delegate: AddItemViewControllerDelegate?
     
     
     override func viewDidLoad() {
@@ -27,13 +35,16 @@ class AddItemViewController: UITableViewController, UITextFieldDelegate {
     }
 
     @IBAction func cancel(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+        delegate?.addItemViewControllerDidCancel(self)
     }
     
     @IBAction func done(sender: AnyObject) {
         
-        println(textField.text)
-        dismissViewControllerAnimated(true, completion: nil)
+        let item =  ChecklistItem()
+        item.text = textField.text
+        item.checked = false
+        
+        delegate?.addItemViewController(self, didFinishedAddingItem: item)
     }
     
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
@@ -47,7 +58,7 @@ class AddItemViewController: UITableViewController, UITextFieldDelegate {
         let oldText: NSString = textField.text
         let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
         
-        doneBarButton.enabled = (newText.length > 0)
+        doneBarButton.enabled = newText.length > 0
        
         return true
     }
