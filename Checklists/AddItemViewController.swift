@@ -11,6 +11,7 @@ import UIKit
 protocol AddItemViewControllerDelegate: class {
     func addItemViewControllerDidCancel(controller: AddItemViewController)
     func addItemViewController(controller: AddItemViewController, didFinishedAddingItem item: ChecklistItem)
+    func addItemViewController(controller: AddItemViewController, didFinishedEditing item: ChecklistItem)
 }
 
 class AddItemViewController: UITableViewController, UITextFieldDelegate {
@@ -21,11 +22,19 @@ class AddItemViewController: UITableViewController, UITextFieldDelegate {
     
     weak var delegate: AddItemViewControllerDelegate?
     
+    var itemToEdit: ChecklistItem?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.rowHeight = 44
+        
+        if let item = itemToEdit {
+            title = "Edit Item"
+            textField.text = item.text
+            doneBarButton.enabled = true
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -39,12 +48,14 @@ class AddItemViewController: UITableViewController, UITextFieldDelegate {
     }
     
     @IBAction func done(sender: AnyObject) {
-        
-        let item =  ChecklistItem()
-        item.text = textField.text
-        item.checked = false
-        
-        delegate?.addItemViewController(self, didFinishedAddingItem: item)
+        if let item = itemToEdit {
+            item.text = textField.text
+            delegate?.addItemViewController(self, didFinishedEditing: item)
+        } else {
+            let item = ChecklistItem()
+            item.text = textField.text
+            delegate?.addItemViewController(self, didFinishedAddingItem: item)
+        }
     }
     
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
