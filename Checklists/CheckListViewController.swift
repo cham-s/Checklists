@@ -106,13 +106,13 @@ class CheckListViewController: UITableViewController, AddItemViewControllerDeleg
             
             let navigationController = segue.destinationViewController as UINavigationController
             
-            let controller = navigationController.topViewController as AddItemViewController
+            let controller = navigationController.topViewController as ItemDetailViewController
             
             controller.delegate = self
         } else if segue.identifier == "EditItem" {
             let navigationController = segue.destinationViewController as UINavigationController
             
-            let controller = navigationController.topViewController as AddItemViewController
+            let controller = navigationController.topViewController as ItemDetailViewController
             controller.delegate = self
             
             if let indexPath = tableView.indexPathForCell(sender as UITableViewCell) {
@@ -123,11 +123,11 @@ class CheckListViewController: UITableViewController, AddItemViewControllerDeleg
     
     
     // AddItem delegate
-    func addItemViewControllerDidCancel(controller: AddItemViewController) {
+    func addItemViewControllerDidCancel(controller: ItemDetailViewController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func addItemViewController(controller: AddItemViewController, didFinishedEditing item: ChecklistItem) {
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishedEditing item: ChecklistItem) {
         if let index = find(items, item) {
             let indexPath = NSIndexPath(forRow: index, inSection: 0)
             if let cell = tableView.cellForRowAtIndexPath(indexPath) {
@@ -139,7 +139,7 @@ class CheckListViewController: UITableViewController, AddItemViewControllerDeleg
     }
     
     
-    func addItemViewController(controller: AddItemViewController, didFinishedAddingItem item: ChecklistItem) {
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishedAddingItem item: ChecklistItem) {
         
         let newRowIndex = items.count
         

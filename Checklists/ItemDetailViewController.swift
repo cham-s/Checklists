@@ -1,5 +1,5 @@
 //
-//  AddItemViewController.swift
+//  ItemDetailViewController.swift
 //  Checklists
 //
 //  Created by gecko on 10/03/15.
@@ -9,12 +9,12 @@
 import UIKit
 
 protocol AddItemViewControllerDelegate: class {
-    func addItemViewControllerDidCancel(controller: AddItemViewController)
-    func addItemViewController(controller: AddItemViewController, didFinishedAddingItem item: ChecklistItem)
-    func addItemViewController(controller: AddItemViewController, didFinishedEditing item: ChecklistItem)
+    func addItemViewControllerDidCancel(controller: ItemDetailViewController)
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishedAddingItem item: ChecklistItem)
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishedEditing item: ChecklistItem)
 }
 
-class AddItemViewController: UITableViewController, UITextFieldDelegate {
+class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
     
     
     @IBOutlet weak var textField: UITextField!
@@ -50,11 +50,11 @@ class AddItemViewController: UITableViewController, UITextFieldDelegate {
     @IBAction func done(sender: AnyObject) {
         if let item = itemToEdit {
             item.text = textField.text
-            delegate?.addItemViewController(self, didFinishedEditing: item)
+            delegate?.itemDetailViewController(self, didFinishedEditing: item)
         } else {
             let item = ChecklistItem()
             item.text = textField.text
-            delegate?.addItemViewController(self, didFinishedAddingItem: item)
+            delegate?.itemDetailViewController(self, didFinishedAddingItem: item)
         }
     }
     
